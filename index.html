@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Тебе особенное приглашение на свидание! ✨💖</title>
+  
+  <!-- SEO & Open Graph Meta Tags for beautiful Telegram / WhatsApp preview -->
+  <meta name="description" content="Для тебя приготовлен интерактивный сюрприз... Сотри защитный слой и открой приглашение! 💌">
+  <meta property="og:title" content="Тебе особенное приглашение на свидание! ✨💖">
+  <meta property="og:description" content="Для тебя приготовлен интерактивный сюрприз... Открой его! 💌">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./assets/images/step1_1.webp">
+  <meta name="theme-color" content="#FF6584">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>">
+
+  <!-- Google Fonts: Comfortaa & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- Floating Ambient Particles Background -->
+  <div id="ambient-bg" aria-hidden="true">
+    <div class="floating-flower flower-1"></div>
+    <div class="floating-flower flower-2"></div>
+    <div class="floating-flower flower-3"></div>
+    <div class="floating-flower flower-4"></div>
+    <div class="floating-heart heart-1">💖</div>
+    <div class="floating-heart heart-2">🌸</div>
+    <div class="floating-heart heart-3">✨</div>
+    <div class="floating-heart heart-4">💕</div>
+  </div>
+
+  <!-- Sound Toggle Button -->
+  <button id="sound-btn" class="sound-toggle-btn" aria-label="Включить/выключить звук" title="Звуковые эффекты">
+    <span id="sound-icon" class="sound-icon">🔊</span>
+  </button>
+
+  <!-- Interactive Scratch Layer Overlay -->
+  <div id="scratch-overlay" class="scratch-overlay">
+    <canvas id="scratch-canvas"></canvas>
+    <div class="scratch-content" id="scratch-content">
+      <div class="scratch-sparkle-stars" aria-hidden="true">
+        <span class="star s1">✨</span>
+        <span class="star s2">💖</span>
+        <span class="star s3">✨</span>
+      </div>
+      <div class="scratch-badge">Секретное послание 💌</div>
+      <h1 class="scratch-title">Сотри меня ✨</h1>
+      <p class="scratch-subtitle">Потри экран пальчиком или мышкой, чтобы узнать тайну</p>
+      
+      <!-- Real-time Scratch Progress -->
+      <div class="scratch-progress-wrap">
+        <div class="scratch-progress-bar">
+          <div id="scratch-progress-fill" class="scratch-progress-fill" style="width: 0%;"></div>
+        </div>
+        <div id="scratch-percent" class="scratch-percent">Стерто: 0% 💕</div>
+      </div>
+
+      <button id="quick-reveal-btn" class="quick-reveal-btn">
+        <span>Открыть сразу ✨</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main App Shell -->
+  <main class="app-container">
+    
+    <!-- Step Indicator Progress (Visible from Step 3 onwards) -->
+    <div id="steps-progress" class="steps-progress-bar hidden">
+      <div class="progress-track">
+        <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+        <div id="progress-heart" class="progress-heart">💖</div>
+      </div>
+      <div class="progress-labels">
+        <span id="step-counter-text" class="step-counter-text">Шаг 1 из 4</span>
+      </div>
+    </div>
+
+    <!-- Step 1: Initial Question (Wavy Cloud Card) -->
+    <section id="step-1" class="step-card step-card-wavy active">
+      <div class="card-inner">
+        <div class="media-container">
+          <img src="./assets/images/step1_2.webp" alt="Милые котики целуются" class="reaction-gif" id="step1-gif">
+        </div>
+        <h2 class="question-title">
+          <span id="recipient-heading">Ты пойдёшь со мной</span><br>
+          <span class="title-accent">на свидание? 🥺👉👈</span>
+        </h2>
+        <p class="question-subtitle">Я приготовил(а) кое-что невероятно милое и уютное только для нас двоих...</p>
+        
+        <div class="actions-area" id="step1-actions">
+          <button id="btn-yes" class="btn btn-yes">
+            <span class="btn-text">Да! 💖</span>
+            <span class="heart-pulse-icon">✨</span>
+          </button>
+          
+          <div class="no-btn-wrapper" id="no-btn-wrapper">
+            <button id="btn-no" class="btn btn-no">
+              <span id="btn-no-text">Нет 🙈</span>
+            </button>
+          </div>
+        </div>
+        <p id="dodges-hint" class="dodges-hint"></p>
+      </div>
+    </section>
+
+    <!-- Step 2: Confirmation / Surprise Reaction -->
+    <section id="step-2" class="step-card step-card-wavy hidden">
+      <div class="card-inner">
+        <div class="media-container">
+          <img src="./assets/images/step2_2.webp" alt="Котики обнимаются" class="reaction-gif">
+          <div class="reaction-hearts-burst" aria-hidden="true">💖✨🥰</div>
+        </div>
+        <h2 class="question-title">
+          Подожди, ты правда <br>
+          <span class="title-accent">сказала «ДА»?! 😍🎉</span>
+        </h2>
+        <p class="question-subtitle">
+          Я был(а) готов(а), что ты будешь сопротивляться ахах! 🥹<br>
+          Теперь пути назад нет — давай спланируем наше идеальное свидание мечты! ✨
+        </p>
+        <div class="actions-area single-action">
+          <button id="btn-to-ideas" class="btn btn-primary pulse-btn">
+            <span>Выбрать сценарий свидания 🚀💕</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3: Date Ideas Selection (Question with date options) -->
+    <section id="step-3" class="step-card modern-card hidden">
+      <div class="card-inner">
+        <div class="step-badge">Идеи для свидания ✨</div>
+        <h2 class="question-title text-center">
+          Куда мы отправимся? 🗺️💕
+        </h2>
+        <p class="question-subtitle text-center">
+          Выбери один или несколько сценариев, которые тебе больше всего по душе:
+        </p>
+
+        <div class="options-grid date-ideas-grid" id="ideas-grid">
+          <!-- Option 1 -->
+          <div class="option-card" data-id="cafe">
+            <div class="option-check"></div>
+            <div class="option-icon">☕</div>
+            <div class="option-info">
+              <h3 class="option-title">Уютная кофейня & десерты</h3>
+              <p class="option-desc">Вкусный авторский раф, свежие круассаны и долгие тёплые разговоры обо всем на свете</p>
+            </div>
+            <span class="option-tag">#Уют</span>
+          </div>
+
+          <!-- Option 2 -->
+          <div class="option-card" data-id="dinner">
+            <div class="option-check"></div>
+            <div class="option-icon">🍕</div>
+            <div class="option-info">
+              <h3 class="option-title">Романтический ужин при свечах</h3>
+              <p class="option-desc">Любимая пицца или паста, бокал вина или лимонада и приглушенный теплый свет</p>
+            </div>
+            <span class="option-tag">#Романтика</span>
+          </div>
+
+          <!-- Option 3 -->
+          <div class="option-card" data-id="movie">
+            <div class="option-check"></div>
+            <div class="option-icon">🎬</div>
+            <div class="option-info">
+              <h3 class="option-title">Киновечер с попкорном</h3>
+              <p class="option-desc">Классный фильм на большом экране, гора попкорна, теплый плед и самые нежные обнимашки</p>
+            </div>
+            <span class="option-tag">#Милота</span>
+          </div>
+
+          <!-- Option 4 -->
+          <div class="option-card" data-id="walk">
+            <div class="option-check"></div>
+            <div class="option-icon">🎡</div>
+            <div class="option-info">
+              <h3 class="option-title">Прогулка под ночными огнями</h3>
+              <p class="option-desc">Вечерний парк, огни города, горячий кофе в стаканчиках и гулять держась за руки</p>
+            </div>
+            <span class="option-tag">#Атмосфера</span>
+          </div>
+
+          <!-- Option 5 -->
+          <div class="option-card" data-id="rooftop">
+            <div class="option-check"></div>
+            <div class="option-icon">🌌</div>
+            <div class="option-info">
+              <h3 class="option-title">Крыша или пикник на закате</h3>
+              <p class="option-desc">Смотреть на звездное небо и вечерний горизонт под романтический плейлист</p>
+            </div>
+            <span class="option-tag">#Магия</span>
+          </div>
+
+          <!-- Option 6 -->
+          <div class="option-card" data-id="games">
+            <div class="option-check"></div>
+            <div class="option-icon">🎮</div>
+            <div class="option-info">
+              <h3 class="option-title">PlayStation & Настолки дома</h3>
+              <p class="option-desc">Зарубы в приставку, файтинги или кооперативные игры, смех, вкусняшки и домашний чилл</p>
+            </div>
+            <span class="option-tag">#Веселье</span>
+          </div>
+
+          <!-- Option 7 -->
+          <div class="option-card" data-id="workshop">
+            <div class="option-check"></div>
+            <div class="option-icon">🎨</div>
+            <div class="option-info">
+              <h3 class="option-title">Творческий мастер-класс</h3>
+              <p class="option-desc">Гончарный круг, рисование картин или приготовление блюд вдвоем, как в романтичном кино</p>
+            </div>
+            <span class="option-tag">#Творчество</span>
+          </div>
+
+          <!-- Option 8: Custom Secret Option -->
+          <div class="option-card custom-option-card" data-id="custom" id="custom-idea-card">
+            <div class="option-check"></div>
+            <div class="option-icon">💌</div>
+            <div class="option-info">
+              <h3 class="option-title">Свой особенный вариант</h3>
+              <p class="option-desc">Есть тайное желание или идея? Напиши его прямо сюда:</p>
+              <input type="text" id="custom-idea-input" class="custom-input" placeholder="Например: Поехать кататься на коньках..." maxlength="80">
+            </div>
+            <span class="option-tag">#Особенное</span>
+          </div>
+        </div>
+
+        <div class="selection-footer">
+          <div id="ideas-count" class="selection-counter">Выбрано: 0 вариантов</div>
+          <button id="btn-to-food" class="btn btn-primary" disabled>
+            <span>Дальше: Что будем кушать? 😋</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4: Food Selection -->
+    <section id="step-4" class="step-card modern-card hidden">
+      <div class="card-inner">
+        <div class="step-badge">Угощения & Еда 🍕</div>
+        <h2 class="question-title text-center">
+          Что мы будем кушать? 😋
+        </h2>
+        <p class="question-subtitle text-center">
+          Идеальное свидание требует вкусной еды! Выбери то, что хочется сегодня:
+        </p>
+
+        <div class="food-grid" id="food-grid">
+          <!-- Pizza -->
+          <div class="food-card" data-id="pizza" data-title="Пицца">
+            <div class="food-check"></div>
+            <div class="food-img-wrap">
+              <img src="./assets/images/food_pizza.webp" alt="Пицца" class="food-img">
+            </div>
+            <h3 class="food-title">Пицца 🍕</h3>
+            <span class="food-desc">Сырная, пепперони или маргарита</span>
+          </div>
+
+          <!-- Sushi -->
+          <div class="food-card" data-id="sushi" data-title="Суши и роллы">
+            <div class="food-check"></div>
+            <div class="food-img-wrap">
+              <img src="./assets/images/food_sushi.webp" alt="Суши" class="food-img">
+            </div>
+            <h3 class="food-title">Суши & Роллы 🍣</h3>
+            <span class="food-desc">Филадельфия, запеченные сеты</span>
+          </div>
+
+          <!-- Pasta -->
+          <div class="food-card" data-id="pasta" data-title="Итальянская паста">
+            <div class="food-check"></div>
+            <div class="food-img-wrap">
+              <img src="./assets/images/food_pasta.webp" alt="Паста" class="food-img">
+            </div>
+            <h3 class="food-title">Паста 🍝</h3>
+            <span class="food-desc">Карбонара или сливочная с морепродуктами</span>
+          </div>
+
+          <!-- Burger -->
+          <div class="food-card" data-id="burger" data-title="Сочные бургеры">
+            <div class="food-check"></div>
+            <div class="food-img-wrap">
+              <img src="./assets/images/food_burger.webp" alt="Бургеры" class="food-img">
+            </div>
+            <h3 class="food-title">Бургеры 🍔</h3>
+            <span class="food-desc">Сочные котлетки и хрустящая картошка</span>
+          </div>
+
+          <!-- Ramen -->
+          <div class="food-card" data-id="ramen" data-title="Ароматный рамен">
+            <div class="food-check"></div>
+            <div class="food-img-wrap">
+              <img src="./assets/images/food_ramen.webp" alt="Рамен" class="food-img">
+            </div>
+            <h3 class="food-title">Рамен 🍜</h3>
+            <span class="food-desc">Насыщенный бульон и азиатский уют</span>
+          </div>
+
+          <!-- Desserts / Rollton playful -->
+          <div class="food-card" data-id="rollton" data-title="Роллтон для двоих">
+            <div class="food-check"></div>
+            <div class="food-img-wrap">
+              <img src="./assets/images/food_rollton.webp" alt="Роллтон" class="food-img">
+            </div>
+            <h3 class="food-title">Роллтон 🍜✨</h3>
+            <span class="food-desc">Для романтиков с особым вкусом ахах</span>
+          </div>
+        </div>
+
+        <div class="selection-footer">
+          <div id="food-count" class="selection-counter">Выбрано: 0 блюд</div>
+          <button id="btn-to-time" class="btn btn-primary" disabled>
+            <span>Дальше: Выбрать дату и время 📅</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 5: Date & Time Selection -->
+    <section id="step-5" class="step-card modern-card hidden">
+      <div class="card-inner">
+        <div class="step-badge">Дата & Время 📅</div>
+        <h2 class="question-title text-center">
+          Когда ты свободна? ⏰💕
+        </h2>
+        <p class="question-subtitle text-center">
+          Выбери удобный день недели или укажи конкретное время:
+        </p>
+
+        <!-- Quick Chips -->
+        <div class="time-chips-container" id="time-chips">
+          <button type="button" class="chip-btn" data-val="В эту пятницу вечером ✨">В эту пятницу вечером ✨</button>
+          <button type="button" class="chip-btn" data-val="В субботу днем ☀️">В субботу днем ☀️</button>
+          <button type="button" class="chip-btn" data-val="В субботу вечером 🌙">В субботу вечером 🌙</button>
+          <button type="button" class="chip-btn" data-val="В воскресенье 🌸">В воскресенье 🌸</button>
+          <button type="button" class="chip-btn" data-val="В любой свободный вечер 🥰">В любой свободный вечер 🥰</button>
+        </div>
+
+        <!-- Custom Date & Time Picker -->
+        <div class="custom-datetime-box">
+          <div class="datetime-field">
+            <label for="date-input" class="field-label">📅 Конкретный день:</label>
+            <input type="date" id="date-input" class="datetime-input">
+          </div>
+          <div class="datetime-field">
+            <label for="time-input" class="field-label">⏰ Время встречи:</label>
+            <input type="time" id="time-input" class="datetime-input" value="19:00">
+          </div>
+        </div>
+
+        <div class="selection-footer">
+          <div id="selected-time-summary" class="selection-counter">Выбери подходящий вариант выше</div>
+          <button id="btn-to-ticket" class="btn btn-primary pulse-btn" disabled>
+            <span>Оформить билет на свидание! 🎟️✨</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 6: Final Love Ticket & Telegram Action -->
+    <section id="step-6" class="step-card ticket-card-step hidden">
+      <div class="card-inner">
+        <div class="media-container compact">
+          <img src="./assets/images/step2_1.webp" alt="Счастливые котики" class="reaction-gif ticket-gif">
+        </div>
+        
+        <h2 class="question-title text-center">
+          Ура! Свидание официально <br>
+          <span class="title-accent">запланировано! 🎟️💖</span>
+        </h2>
+        <p class="question-subtitle text-center">
+          Твой персональный VIP-билет готов! Отправь мне ответ, чтобы я забронировал(а) всё самое лучшее:
+        </p>
+
+        <!-- The Gorgeous Love Ticket -->
+        <div class="love-ticket" id="love-ticket">
+          <div class="ticket-header">
+            <div class="ticket-tag">VIP DATE PASS • ЭКСКЛЮЗИВ</div>
+            <div class="ticket-no" id="ticket-number">#LOVE-2026-DATE</div>
+          </div>
+          
+          <div class="ticket-body">
+            <div class="ticket-row">
+              <span class="ticket-label">Для кого:</span>
+              <span class="ticket-val" id="ticket-recipient">Моя любимая 💖</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">🗺️ Программа:</span>
+              <span class="ticket-val" id="ticket-ideas">Уютный вечер</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">🍕 Вкусняшки:</span>
+              <span class="ticket-val" id="ticket-food">Пицца и десерты</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">📅 Когда:</span>
+              <span class="ticket-val" id="ticket-time">В субботу вечером</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">👗 Дресс-код:</span>
+              <span class="ticket-val highlight-val">Твоя самая тёплая улыбка ✨</span>
+            </div>
+          </div>
+
+          <div class="ticket-footer">
+            <div class="ticket-stamp">
+              <span>ОДОБРЕНО</span>
+              <small>С ЛЮБОВЬЮ ❤️</small>
+            </div>
+            <div class="ticket-barcode">
+              <div class="barcode-lines"></div>
+              <span>1402-DATE-CONFIRMED-VIP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons: Telegram & Copy -->
+        <div class="final-actions">
+          <a id="btn-telegram" href="#" target="_blank" class="btn btn-telegram">
+            <svg class="tg-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
+            </svg>
+            <span>Отправить ответ в Telegram 💌</span>
+          </a>
+
+          <button id="btn-copy-answer" class="btn btn-secondary">
+            <span>Скопировать мой ответ 📋</span>
+          </button>
+
+          <button id="btn-restart" class="btn btn-text-only">
+            <span>Пройти заново 🔄</span>
+          </button>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">Ответ скопирован в буфер обмена! 💌</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Canvas Confetti Library (Bundled locally) -->
+  <script src="./assets/js/confetti.browser.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="./script.js"></script>
+</body>
+</html>
